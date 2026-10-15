@@ -93,9 +93,24 @@ function king(key, title, unit) {
   return `<h1>${title}</h1>${any ? `<div class="card"><ol class="rank">${rows.map((r, i) => `<li><span>${i + 1}. ${esc(r.name)}</span><span>${r[key]} ${unit}</span></li>`).join('')}</ol></div>` : empty('Henüz ' + unit + ' kaydı yok. Tamamlanan maçların sonuçlarına göre burada görünecek.')}`;
 }
 
+const POS = ['Kaleci', 'Defans', 'Orta saha', 'Forvet'];
 function oyuncular() {
-  return `<h1>Oyuncular / Hesaplar</h1><div class="grid">${S.d.stats.map((s) => `<div class="card"><h2>${esc(s.name)}</h2><p class="muted">Kullanıcı adı: ${esc(s.username)}</p>
-  <div class="stats"><div><b>${s.p}</b>Maç</div><div><b>${s.w}</b>Galibiyet</div><div><b>${s.goals}</b>Gol</div><div><b>${s.assists}</b>Asist</div></div></div>`).join('')}</div>`;
+  const me = S.d.stats.find((x) => x.id === S.me.id) || {};
+  after = () => { const f = document.getElementById('pf'), err = document.getElementById('perr');
+    f.addEventListener('submit', (e) => { e.preventDefault(); act(async () => {
+      await api('PUT', '/api/profile', { first_name: f.first_name.value, last_name: f.last_name.value, country: f.country.value, position: f.position.value });
+      S.flash = 'Kartın güncellendi.'; await load();
+    }, err); }); };
+  return `${flash()}<h1>Oyuncular / Hesaplar</h1><div class="grid">${S.d.stats.map((s) => {
+    const full = [s.first_name, s.last_name].filter(Boolean).join(' ') || s.name;
+    return `<div class="card"><h2>${esc(full)}</h2><p class="muted">${esc(s.country || 'Ülke girilmedi')} · ${esc(s.position || 'Mevki seçilmedi')}</p><p class="muted">Kullanıcı adı: ${esc(s.username)}</p>
+  <div class="stats"><div><b>${s.goals}</b>Gol</div><div><b>${s.assists}</b>Asist</div><div><b>${s.p}</b>Maç</div><div><b>${s.w}</b>Galibiyet</div></div></div>`; }).join('')}</div>
+  <form id="pf" class="card" novalidate><h2>Kartımı düzenle</h2>
+  <div class="grid"><div><label for="fn">İsim</label><input id="fn" name="first_name" maxlength="40" value="${esc(me.first_name)}"></div>
+  <div><label for="ln2">Soyisim</label><input id="ln2" name="last_name" maxlength="40" value="${esc(me.last_name)}"></div>
+  <div><label for="ct">Ülke</label><input id="ct" name="country" maxlength="40" value="${esc(me.country)}"></div>
+  <div><label for="ps">Mevki</label><select id="ps" name="position"><option value="">Seçilmedi</option>${POS.map((p) => `<option ${me.position === p ? 'selected' : ''}>${p}</option>`).join('')}</select></div></div>
+  <div id="perr"></div><button class="btn" type="submit">Kartımı kaydet</button></form>`;
 }
 
 const opts = (sel) => S.d.users.map((u) => `<option value="${u.id}" ${u.id === sel ? 'selected' : ''}>${esc(u.display_name)}</option>`).join('');
