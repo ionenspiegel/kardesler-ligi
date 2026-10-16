@@ -56,3 +56,10 @@ input,select,textarea{font:inherit;width:100%;padding:.55rem;border:2px solid #9
 .tabs{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap}
 @media(max-width:560px){.goal{grid-template-columns:1fr 1fr}.goal .btn{grid-column:1/-1}h1{font-size:1.5rem}}
 @media(prefers-reduced-motion:no-preference){.btn{transition:background .15s}}
+.f{display:inline-block;width:1.5rem;height:1.5rem;line-height:1.5rem;text-align:center;border-radius:4px;font-size:.8rem;font-weight:700;margin-right:.2rem;color:#fff}
+.fG{background:#1f7a3f}.fB{background:#5b6472}.fM{background:#a4262c}
+#cres{min-height:2.2rem}#cres.win{color:var(--red)}
+:root[data-theme=dark]{--chalk:#0e1a13;--card:#16251c;--ink:#e8efe9;--muted:#a9b9ad;--line:#2a3d31;--turf:#2a7d4d;--turf2:#1f6b3f}
+:root[data-theme=dark] input,:root[data-theme=dark] select,:root[data-theme=dark] textarea{background:#0e1a13;color:var(--ink);border-color:#47604f}
+:root[data-theme=dark] .btn.alt{background:var(--card);color:#9fe3b8}
+:root[data-theme=dark] nav a[aria-current=page]{color:#9fe3b8}
